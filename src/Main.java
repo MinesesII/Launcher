@@ -1,12 +1,20 @@
+import javax.swing.JPanel;
+
 public class Main {
 	
-	static Windows window;
+	private static Windows window;
+	private JPanel pan = new JPanel();
 
 	public static void main(String[] args){
 
-		window = new Windows();
-		window.show ();
+		Initialize();
 	}  
+	
+	public static void Initialize(){
+		
+		window = new Windows();
+		window.setVisible(true);
+	}
 	
 	public Windows getWindow(){
 		return window;

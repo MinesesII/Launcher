@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,7 +16,7 @@ import javax.swing.event.HyperlinkListener;
 @SuppressWarnings("serial")
 public class Windows extends JFrame implements HyperlinkListener, ActionListener{
 
-	JEditorPane viewer       = new JEditorPane ();
+	JEditorPane viewer= new JEditorPane();
 
 	public Windows () {	
 		JScrollPane scrollPane = new JScrollPane (viewer);
@@ -26,6 +27,18 @@ public class Windows extends JFrame implements HyperlinkListener, ActionListener
 	    setLocationRelativeTo(null);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loadPage ("http://mcupdate.tumblr.com/");
+		initializeButton();
+	}
+	
+	public void initializeButton(){
+		JPanel boutonPane = new JPanel();
+		JButton playButton = new JButton("Play");
+		boutonPane.add(playButton);
+		this.getContentPane().add(boutonPane, BorderLayout.SOUTH);
+		playButton.addActionListener(new ActionListener(){
+		      public void actionPerformed(ActionEvent event){	
+		    	  System.out.println("test");
+		    }});
 	}
 
 	public void actionPerformed (ActionEvent event){
@@ -41,9 +54,6 @@ public class Windows extends JFrame implements HyperlinkListener, ActionListener
 		}
 	}
 
-	@Override
-	public void hyperlinkUpdate(HyperlinkEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void hyperlinkUpdate(HyperlinkEvent e) {		
 	}
 }
