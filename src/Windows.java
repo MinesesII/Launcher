@@ -2,7 +2,9 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -37,7 +39,6 @@ public class Windows extends JFrame implements HyperlinkListener, ActionListener
 		this.getContentPane().add(boutonPane, BorderLayout.SOUTH);
 		playButton.addActionListener(new ActionListener(){
 		      public void actionPerformed(ActionEvent event){	
-		    	  System.out.println("test");
 		    }});
 	}
 
