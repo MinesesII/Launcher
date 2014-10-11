@@ -1,10 +1,9 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -24,22 +23,22 @@ public class Windows extends JFrame implements HyperlinkListener, ActionListener
 		JScrollPane scrollPane = new JScrollPane (viewer);
 		getContentPane().add (scrollPane, BorderLayout.CENTER);
 		viewer.setEditable (false);
-	    setTitle("Launcher Voxelion");
-	    setSize(800, 600);
-	    setLocationRelativeTo(null);
-	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		loadPage ("http://mcupdate.tumblr.com/");
-		initializeButton();
+		setTitle("Launcher Voxelion");
+		setSize(800, 600);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		showText("Check for updates");
+		viewer.setBackground(Color.GRAY);
 	}
-	
+
 	public void initializeButton(){
 		JPanel boutonPane = new JPanel();
 		JButton playButton = new JButton("Play");
 		boutonPane.add(playButton);
 		this.getContentPane().add(boutonPane, BorderLayout.SOUTH);
 		playButton.addActionListener(new ActionListener(){
-		      public void actionPerformed(ActionEvent event){	
-		    }});
+			public void actionPerformed(ActionEvent event){	
+			}});
 	}
 
 	public void actionPerformed (ActionEvent event){
@@ -56,5 +55,9 @@ public class Windows extends JFrame implements HyperlinkListener, ActionListener
 	}
 
 	public void hyperlinkUpdate(HyperlinkEvent e) {		
+	}
+
+	public void showText(String text){
+		viewer.setText(text);
 	}
 }

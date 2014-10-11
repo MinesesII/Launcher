@@ -35,6 +35,13 @@ public class Download {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		try {
+			fos.close();
+			rbc.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
