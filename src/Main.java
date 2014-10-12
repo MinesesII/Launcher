@@ -1,11 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
 
 	private Windows window;
 	private static final String version = "1.0.0";
+	private static String lastVersion;
 	private static Main main;
 
 	public static void main(String[] args){
@@ -22,6 +24,11 @@ public class Main {
 		}
 		else{
 			window.showText("Downloading new Launcher");
+			try {
+				new Download().downloadFile("http://68oc39zqld.1fichier.com", "Voxelion Launcher"+" "+lastVersion+".jar");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -31,18 +38,22 @@ public class Main {
 
 
 	private static boolean isUpdated(){
-		new Download().downloadFile("versions.txt","https://www.dropbox.com/s/sres8zpv1fvobg2/versions.txt?dl=1");
+		try {
+			new Download().downloadFile("http://1m4k8akux4.1fichier.com", "versions.txt");
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		Scanner scanner = null;
 		try {
 			scanner = new Scanner(new File("versions.txt"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	    String line = scanner.nextLine();
+	    lastVersion = scanner.nextLine();
 	    scanner.close();
 		File fileToDelete = new File("versions.txt");
 		fileToDelete.delete();
-		if(line.contentEquals(version)){
+		if(lastVersion.contentEquals(version)){
 			return true;
 		}
 		return false;

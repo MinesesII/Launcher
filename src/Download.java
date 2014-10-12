@@ -1,47 +1,52 @@
-import java.io.*;
-import java.net.*;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-
-
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+ 
+/**
+ * A utility that downloads a file from a URL.
+ * @author www.codejava.net
+ *
+ */
 public class Download {
-
-
-	public Download(){
-
-	}
-
-	public void downloadFile(String fileName, String Url){
-		URL website = null;
-		try {
-			website = new URL(Url);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		ReadableByteChannel rbc = null;
-		try {
-			rbc = Channels.newChannel(website.openStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		FileOutputStream fos = null;
-		try {
-			fos = new FileOutputStream(fileName);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			fos.close();
-			rbc.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
+    private static final int BUFFER_SIZE = 4096;
+ 
+    /**
+     * Downloads a file from a URL
+     * @param fileURL HTTP URL of the file to be downloaded
+     * @param saveDir path of the directory to save the file
+     * @throws IOException
+     */
+    public static void downloadFile(String fileURL, String fileName)
+            throws IOException {
+        URL url = new URL(fileURL);
+        HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+        int responseCode = httpConn.getResponseCode();
+ 
+        // always check HTTP response code first
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+ 
+            // opens input stream from the HTTP connection
+            InputStream inputStream = httpConn.getInputStream();
+            String saveFilePath = fileName;
+             
+            // opens an output stream to save into file
+            FileOutputStream outputStream = new FileOutputStream(saveFilePath);
+ 
+            int bytesRead = -1;
+            byte[] buffer = new byte[BUFFER_SIZE];
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+ 
+            outputStream.close();
+            inputStream.close();
+ 
+            System.out.println("File downloaded");
+        } else {
+            System.out.println("No file to download. Server replied HTTP code: " + responseCode);
+        }
+        httpConn.disconnect();
+    }
 }
