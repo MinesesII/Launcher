@@ -25,7 +25,12 @@ public class Main {
 		else{
 			window.showText("Downloading new Launcher");
 			try {
-				new Download().downloadFile("http://68oc39zqld.1fichier.com", "Voxelion Launcher"+" "+lastVersion+".jar");
+				new Download().downloadFile("http://68oc39zqld.1fichier.com", "Voxelion.jar");
+				try {
+					new Loader().runNewLauncher("Voxelion.jar");		
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
