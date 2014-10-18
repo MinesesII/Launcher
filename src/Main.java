@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Main {
 
 	private Windows window;
-	private static final String version = "1.0.0";
+	private static final String version = "1.0.1";
 	private static String lastVersion;
 	private static Main main;
 
@@ -19,22 +19,6 @@ public class Main {
 	public void Initialize(){
 		window = new Windows();
 		window.setVisible(true);	
-		if(isUpdated()){
-			window.loadPage("http://mcupdate.tumblr.com/");
-		}
-		else{
-			window.showText("Downloading new Launcher");
-			try {
-				new Download().downloadFile("http://68oc39zqld.1fichier.com", "Voxelion.jar");
-				try {
-					new Loader().runNewLauncher("Voxelion.jar");		
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	public Windows getWindow(){
@@ -58,6 +42,7 @@ public class Main {
 	    scanner.close();
 		File fileToDelete = new File("versions.txt");
 		fileToDelete.delete();
+		lastVersion = "1.0.1";
 		if(lastVersion.contentEquals(version)){
 			return true;
 		}
