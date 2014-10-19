@@ -8,42 +8,53 @@ import java.util.Scanner;
 public class Main extends Applet {
 
 	private Windows window;
-	private static final String version = "1.0.1";
-	private static String lastVersion;
+	public static final String version = "1.0.0";
+	public static String lastVersion;
+	public static String launcherDownloadLink;
+	public static String gameDownloadLink;
 	private static Main main;
 
-	public static void main(String[] args){
+	public static void main(String[] args) throws Exception{
 
 		main = new Main();
 		main.Initialize();
+		if(args.length!=0){
+			File fileToDelete = new File("Voxelion_launcher_"+args[0]+".jar");
+			fileToDelete.delete();
+		}
 	}  
 
-	public void Initialize(){
-		window = new Windows();
+	public void Initialize() throws Exception{
+		if(isUpdated()){
+			window = new Windows();
+		}
+		else{
+			if(!new File("Voxelion.jar").exists()){
+				new Download().downloadFile(launcherDownloadLink, "Voxelion_Launcher_"+lastVersion+".jar");
+			}
+			new Loader().runNewLauncher("Voxelion_launcher_"+lastVersion+".jar");		
+		}
 	}
 
 	public Windows getWindow(){
 		return window;
 	}
 
-	@SuppressWarnings({ "unused", "static-access" })
-	private static boolean isUpdated(){
-		try {
-			new Download().downloadFile("http://1m4k8akux4.1fichier.com", "versions.txt");
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+	@SuppressWarnings("static-access")
+	private static boolean isUpdated() throws IOException{
+		new Download().downloadFile("http://voxelion.fr/Launcher/versions.txt", "versions.txt");
 		Scanner scanner = null;
 		try {
 			scanner = new Scanner(new File("versions.txt"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	    lastVersion = scanner.nextLine();
-	    scanner.close();
+		lastVersion = scanner.nextLine();
+		launcherDownloadLink = scanner.nextLine();
+		gameDownloadLink = scanner.nextLine();
+		scanner.close();
 		File fileToDelete = new File("versions.txt");
 		fileToDelete.delete();
-		lastVersion = "1.0.1";
 		if(lastVersion.contentEquals(version)){
 			return true;
 		}
