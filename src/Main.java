@@ -12,6 +12,8 @@ public class Main extends Applet {
 	public static String lastVersion;
 	public static String launcherDownloadLink;
 	public static String gameDownloadLink;
+	public static String gameVersion;
+	public static String gameLastVersion;
 	private static Main main;
 
 	public static void main(String[] args) throws Exception{
@@ -47,12 +49,28 @@ public class Main extends Applet {
 			e.printStackTrace();
 		}
 		lastVersion = scanner.nextLine();
+		gameLastVersion = scanner.nextLine();
 		launcherDownloadLink = scanner.nextLine();
 		gameDownloadLink = scanner.nextLine();
 		scanner.close();
 		File fileToDelete = new File("versions.txt");
 		fileToDelete.delete();
 		if(lastVersion.contentEquals(version)){
+			return true;
+		}
+		return false;
+	}
+	
+	static boolean isGameUpdated() throws IOException{
+		Scanner scanner = null;
+		try {
+			scanner = new Scanner(new File("gameVersion.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		gameVersion = scanner.nextLine();
+		scanner.close();
+		if(gameVersion.contentEquals(gameLastVersion)){
 			return true;
 		}
 		return false;

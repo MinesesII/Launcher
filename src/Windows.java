@@ -6,12 +6,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class Windows extends JFrame
 {
 
 	private ProgressBar progressBar;
+	JEditorPane viewer= new JEditorPane();
 
 	public Windows()
 	{
@@ -25,6 +27,11 @@ public class Windows extends JFrame
 		setLocationRelativeTo(null);
 		setBackground(new Color(0,0,0,0));
 		setContentPane(new JLabel(new ImageIcon(getClass().getResource("background.png"))));
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		  Image image = toolkit.getImage(getClass().getResource("cursor.png"));
+		  Point hotSpot = new Point(0,0);  
+		  Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "cursor");  
+		  setCursor (cursor);
 		MouseAdapter mouseHandler = new MouseAdapter() {
 
 			private Point offset;
@@ -34,16 +41,6 @@ public class Windows extends JFrame
 				Component comp = e.getComponent();
 				return p.x < 79 || p.y < 168 || p.x > comp.getWidth() - 85 || p.y > comp.getHeight()  - 73;
 			}
-
-			/*   @Override
-	                    public void mouseMoved(MouseEvent e) {
-	                    	  Component comp = e.getComponent();
-		                        if (isWithinBorder(e)) {
-		                            comp.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-		                        } else {
-		                            comp.setCursor(Cursor.getDefaultCursor());
-		                        }
-	                    }*/
 
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -65,8 +62,8 @@ public class Windows extends JFrame
 					SwingUtilities.getWindowAncestor(e.getComponent()).setLocation(x, y);
 				}
 			}
-
 		};
+
 
 		getContentPane().addMouseListener(mouseHandler);
 		getContentPane().addMouseMotionListener(mouseHandler);
@@ -89,14 +86,31 @@ public class Windows extends JFrame
 		Dimension playButtonsize = playButton.getPreferredSize();
 		playButton.setBounds(550 , 460, playButtonsize.width, playButtonsize.height);
 		playButton.addActionListener(new ActionListener(){  
+			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				if(!new File("Voxelion.jar").exists()){
-					new DownloadGame(Main.gameDownloadLink, "Voxelion.jar");
-				}
-				try {
-					new Loader().runNewLauncher("Voxelion.jar");
-				} catch (Exception e1) {
-					e1.printStackTrace();
+					DownloadGame game = new DownloadGame(Main.gameDownloadLink, "Voxelion.jar");
+					game.start();
+				} 
+				else{
+					try {
+						if (!Main.getMain().isGameUpdated()){
+							File fileToDelete = new File("Voxelion.jar");
+							fileToDelete.delete();
+							DownloadGame game = new DownloadGame(Main.gameDownloadLink, "Voxelion.jar");
+							game.start();
+						}
+						else{
+							try {
+								new Loader().runGame();
+								System.exit(0);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+						}
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
