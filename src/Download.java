@@ -1,17 +1,43 @@
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
+import java.net.URLConnection;
 
 public class Download {
+	
+	public Download(String fileURL, String fileName){
+		InputStream input = null;
+		FileOutputStream writeFile = null;
 
-	static void downloadFile(String urlStr, String file) throws IOException {
-        URL url = new URL(urlStr);
-        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-        fos.close();
-        rbc.close();
-    }
+		try
+		{
+			URL url = new URL(fileURL);
+			URLConnection connection = url.openConnection();
+			input = connection.getInputStream();
+			writeFile = new FileOutputStream(fileName);
+			byte[] buffer = new byte[1024];
+			int read;
+			while ((read = input.read(buffer)) > 0){
+				writeFile.write(buffer, 0, read);
+				writeFile.flush();
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				writeFile.close();
+				input.close();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
 }

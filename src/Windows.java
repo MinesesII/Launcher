@@ -5,11 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
+import java.io.File;
 
+@SuppressWarnings("serial")
 public class Windows extends JFrame
 {
 
+	private ProgressBar progressBar;
+	
 	public Windows()
 	{
 		EventQueue.invokeLater(new Runnable() {
@@ -24,7 +27,7 @@ public class Windows extends JFrame
 				setSize(800, 600);
 				setLocationRelativeTo(null);
 				setBackground(new Color(0,0,0,0));
-				setContentPane(new JLabel(new ImageIcon("assets/background.png")));
+				setContentPane(new JLabel(new ImageIcon(getClass().getResource("background.png"))));
 				MouseAdapter mouseHandler = new MouseAdapter() {
 
 					private Point offset;
@@ -70,46 +73,51 @@ public class Windows extends JFrame
 
 				getContentPane().addMouseListener(mouseHandler);
 				getContentPane().addMouseMotionListener(mouseHandler);
-				Button closeButton = new Button("", new ImageIcon("assets/crossUnclick.jpg").getImage(), new ImageIcon("assets/crossClick.jpg").getImage());
+				Button closeButton = new Button("", new ImageIcon(getClass().getResource("crossUnclick.jpg")).getImage(), new ImageIcon(getClass().getResource("crossClick.jpg")).getImage());
 				Dimension borderButtonsize = closeButton.getPreferredSize();
-				closeButton.setBounds(744 , 30, borderButtonsize.width-5, borderButtonsize.height-5);
+				closeButton.setBounds(744 , 30, borderButtonsize.width, borderButtonsize.height);
 				closeButton.addActionListener(new ActionListener(){  
 					public void actionPerformed(ActionEvent e) {
 						System.exit(0);
 					}
 				});
-				Button minimizeButton = new Button("", new ImageIcon("assets/reduceUnclick.jpg").getImage(), new ImageIcon("assets/reduceClick.jpg").getImage());
-				minimizeButton.setBounds(660 , 30, borderButtonsize.width-5, borderButtonsize.height-5);
+				Button minimizeButton = new Button("", new ImageIcon(getClass().getResource("reduceUnclick.jpg")).getImage(), new ImageIcon(getClass().getResource("reduceClick.jpg")).getImage());
+				minimizeButton.setBounds(660 , 30, borderButtonsize.width, borderButtonsize.height);
 				minimizeButton.addActionListener(new ActionListener(){  
 					public void actionPerformed(ActionEvent e) {
 						setState(Frame.ICONIFIED);
 					}
 				});
-				Button playButton = new Button("", new ImageIcon("assets/playUnclick.png").getImage(), new ImageIcon("assets/playClick.png").getImage());
+				Button playButton = new Button("", new ImageIcon(getClass().getResource("playUnclick.png")).getImage(), new ImageIcon(getClass().getResource("playClick.png")).getImage());
 				Dimension playButtonsize = playButton.getPreferredSize();
-				playButton.setBounds(568 , 452, playButtonsize.width, playButtonsize.height);
+				playButton.setBounds(550 , 460, playButtonsize.width, playButtonsize.height);
 				playButton.addActionListener(new ActionListener(){  
 					public void actionPerformed(ActionEvent e) {
+						if(!new File("Voxelion.jar").exists()){
+							new DownloadGame(Main.gameDownloadLink, "Voxelion.jar");
+						}
 						try {
-							new Download().downloadFile(Main.gameDownloadLink, "Voxelion.jar");
-							try {
-								new Loader().runNewLauncher("Voxelion.jar");
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}		
-							System.exit(0);
-						} catch (IOException e1) {
+							new Loader().runNewLauncher("Voxelion.jar");
+						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
 					}
 				});
+				progressBar = new ProgressBar(new ImageIcon(getClass().getResource("progressBar.png")).getImage());
+				Dimension progressBarSize = progressBar.getPreferredSize();
+				progressBar.setBounds(121 , 475, progressBarSize.width, progressBarSize.height);
 				getContentPane().add(closeButton);
 				getContentPane().add(minimizeButton);
 				getContentPane().add(playButton);
+				getContentPane().add(progressBar);
 				setLocationRelativeTo(null);
 				setVisible(true);
 			}
 		});
+	}
+	
+	public ProgressBar getProgressBar(){
+		return progressBar;
 	}
 }
 

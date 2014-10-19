@@ -29,9 +29,7 @@ public class Main extends Applet {
 			window = new Windows();
 		}
 		else{
-			if(!new File("Voxelion.jar").exists()){
-				new Download().downloadFile(launcherDownloadLink, "Voxelion_Launcher_"+lastVersion+".jar");
-			}
+			new Download(launcherDownloadLink, "Voxelion_Launcher_"+lastVersion+".jar");
 			new Loader().runNewLauncher("Voxelion_launcher_"+lastVersion+".jar");		
 		}
 	}
@@ -40,9 +38,8 @@ public class Main extends Applet {
 		return window;
 	}
 
-	@SuppressWarnings("static-access")
 	private static boolean isUpdated() throws IOException{
-		new Download().downloadFile("http://voxelion.fr/Launcher/versions.txt", "versions.txt");
+		new Download("http://voxelion.fr/Launcher/versions.txt", "versions.txt");
 		Scanner scanner = null;
 		try {
 			scanner = new Scanner(new File("versions.txt"));
