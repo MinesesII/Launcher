@@ -1,9 +1,11 @@
+import java.applet.Applet;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Main {
+@SuppressWarnings("serial")
+public class Main extends Applet {
 
 	private Windows window;
 	private static final String version = "1.0.1";
@@ -18,14 +20,13 @@ public class Main {
 
 	public void Initialize(){
 		window = new Windows();
-		window.setVisible(true);	
 	}
 
 	public Windows getWindow(){
 		return window;
 	}
 
-
+	@SuppressWarnings({ "unused", "static-access" })
 	private static boolean isUpdated(){
 		try {
 			new Download().downloadFile("http://1m4k8akux4.1fichier.com", "versions.txt");
