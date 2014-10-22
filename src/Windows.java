@@ -102,7 +102,7 @@ public class Windows extends JFrame
 						}
 						else{
 							try {
-								new Loader().runGame();
+								new Loader().runGame(0);
 								System.exit(0);
 							} catch (Exception e1) {
 								e1.printStackTrace();
@@ -114,6 +114,42 @@ public class Windows extends JFrame
 				}
 			}
 		});
+		
+		//Bouton temporaire lancement éditeur
+		Button editorButton = new Button("", null, null);
+		Dimension editorButtonsize = new Dimension(29,15);
+		editorButton.setBounds(68 , 30, editorButtonsize.width, editorButtonsize.height);
+		editorButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e) {
+				if(!new File("Voxelion.jar").exists()){
+					DownloadGame game = new DownloadGame(Main.gameDownloadLink, "Voxelion.jar");
+					game.start();
+				} 
+				else{
+					try {
+						if (!Main.getMain().isGameUpdated()){
+							File fileToDelete = new File("Voxelion.jar");
+							fileToDelete.delete();
+							DownloadGame game = new DownloadGame(Main.gameDownloadLink, "Voxelion.jar");
+							game.start();
+						}
+						else{
+							try {
+								new Loader().runGame(1);
+								System.exit(0);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+						}
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		getContentPane().add(editorButton);
+		//Bouton temporaire lancement éditeur
+		
 		progressBar = new ProgressBar(new ImageIcon(getClass().getResource("progressBar.png")).getImage());
 		Dimension progressBarSize = progressBar.getPreferredSize();
 		progressBar.setBounds(121 , 475, progressBarSize.width, progressBarSize.height);

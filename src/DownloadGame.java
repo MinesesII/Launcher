@@ -33,7 +33,7 @@ public class DownloadGame extends Thread{
 				writeFile.flush();
 			}
 			try {
-				new Loader().runGame();
+				new Loader().runGame(0);
 				System.exit(0);
 			} catch (Exception e) {
 				e.printStackTrace();

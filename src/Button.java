@@ -33,16 +33,7 @@ implements MouseListener{
 	}  
 
 	public void paintComponent(Graphics g){  
-		g.setColor(getParent().getBackground());  
-		g.fillRect(0,0,getWidth(),getHeight());  
-		Graphics2D g2D = (Graphics2D)g;  
-		if (hit==true){  
-			g2D.setColor(Color.darkGray);  
-		}else{  
-			g2D.setColor(Color.lightGray);  
-		};  
-		g2D.drawRect(0,0,getWidth()-3,getHeight()-3);  
-		g2D.setColor(Color.black);  
+		Graphics2D g2D = (Graphics2D)g;   
 		if (image!=null){  
 			if(hit==true){
 				g2D.drawImage(image2,0,0,getWidth(),getHeight(),this);  
