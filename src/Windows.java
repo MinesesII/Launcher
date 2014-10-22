@@ -13,7 +13,7 @@ public class Windows extends JFrame
 {
 
 	private ProgressBar progressBar;
-	JEditorPane viewer= new JEditorPane();
+	private News news;
 
 	public Windows()
 	{
@@ -28,10 +28,11 @@ public class Windows extends JFrame
 		setBackground(new Color(0,0,0,0));
 		setContentPane(new JLabel(new ImageIcon(getClass().getResource("background.png"))));
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		  Image image = toolkit.getImage(getClass().getResource("cursor.png"));
-		  Point hotSpot = new Point(0,0);  
-		  Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "cursor");  
-		  setCursor (cursor);
+		Image image = toolkit.getImage(getClass().getResource("cursor.png"));
+		Point hotSpot = new Point(0,0);  
+		Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "cursor");  
+		setCursor (cursor);
+		showNews();
 		MouseAdapter mouseHandler = new MouseAdapter() {
 
 			private Point offset;
@@ -114,7 +115,7 @@ public class Windows extends JFrame
 				}
 			}
 		});
-		
+
 		//Bouton temporaire lancement éditeur
 		Button editorButton = new Button("", null, null);
 		Dimension editorButtonsize = new Dimension(29,15);
@@ -149,7 +150,7 @@ public class Windows extends JFrame
 		});
 		getContentPane().add(editorButton);
 		//Bouton temporaire lancement éditeur
-		
+
 		progressBar = new ProgressBar(new ImageIcon(getClass().getResource("progressBar.png")).getImage());
 		Dimension progressBarSize = progressBar.getPreferredSize();
 		progressBar.setBounds(121 , 475, progressBarSize.width, progressBarSize.height);
@@ -159,6 +160,12 @@ public class Windows extends JFrame
 		getContentPane().add(progressBar);
 		setLocationRelativeTo(null);
 		setVisible(true);
+	}
+	
+	private void showNews(){
+		news = new News();
+		news.setBounds(104 , 274, 369, 140);
+		getContentPane().add(news);
 	}
 
 
