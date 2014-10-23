@@ -164,7 +164,7 @@ public class Windows extends JFrame
 	
 	private void showNews(){
 		news = new News();
-		news.setBounds(104 , 274, 369, 140);
+		news.setBounds(104 , 280, 369, 140);
 		getContentPane().add(news);
 	}
 
