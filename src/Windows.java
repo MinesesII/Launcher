@@ -150,6 +150,14 @@ public class Windows extends JFrame
 		});
 		getContentPane().add(editorButton);
 		//Bouton temporaire lancement éditeur
+		
+		Button NewsButton = new Button("", new ImageIcon(getClass().getResource("reduceUnclick.jpg")).getImage(), new ImageIcon(getClass().getResource("reduceClick.jpg")).getImage());
+		minimizeButton.setBounds(660 , 30, borderButtonsize.width, borderButtonsize.height);
+		minimizeButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e) {
+				setState(Frame.ICONIFIED);
+			}
+		});
 
 		progressBar = new ProgressBar(new ImageIcon(getClass().getResource("progressBar.png")).getImage());
 		Dimension progressBarSize = progressBar.getPreferredSize();
@@ -164,7 +172,7 @@ public class Windows extends JFrame
 	
 	private void showNews(){
 		news = new News();
-		news.setBounds(104 , 280, 369, 140);
+		news.setBounds(104 , 280, 368, 134);
 		getContentPane().add(news);
 	}
 
