@@ -18,8 +18,6 @@ public class Windows extends JFrame
 	private String[] onglet = {"news", "paramater"};
 	private CardLayout layout = new CardLayout();
 	private JPanel JOnglet = new JPanel();
-	private int selectedVersion=0;
-	private String directory;
 
 
 	public Windows()
@@ -44,7 +42,7 @@ public class Windows extends JFrame
 		JOnglet.add(news, onglet[0]);
 		JOnglet.add(parameter, onglet[1]);
 		File pathToJar = new File(new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent());
-		directory = pathToJar.getPath()+"/Voxelion/";
+		Main.getMain().setGameDirectory(pathToJar.getPath()+"/Voxelion/");
 		MouseAdapter mouseHandler = new MouseAdapter() {
 			private Point offset;
 
@@ -84,6 +82,7 @@ public class Windows extends JFrame
 		closeButton.setBounds(744 , 30, borderButtonsize.width, borderButtonsize.height);
 		closeButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e) {
+				Main.getMain().writeSettingsFile();
 				System.exit(0);
 			}
 		});
@@ -100,75 +99,44 @@ public class Windows extends JFrame
 		playButton.addActionListener(new ActionListener(){  
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
-				if(!new File("Voxelion.jar").exists()){
-					DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", directory + "Voxelion.jar");
-					File dir = new File(directory);
+				if(!new File(Main.getMain().getGameDirectory()+"Voxelion.jar").exists()){
+					DownloadGame game;
+					if(Main.getMain().getSelectedVersion().contentEquals("Last update")){
+						game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().getVersionsList().get(0) +".jar", Main.getMain().getGameDirectory() + "Voxelion.jar");
+					}
+					else{
+						game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().getSelectedVersion() +".jar", Main.getMain().getGameDirectory() + "Voxelion.jar");		
+					}
+					File dir = new File(Main.getMain().getGameDirectory());
 					dir.mkdir();
 					game.start();
 				} 
 				else{
-					try {
-						if (!Main.getMain().isGameUpdated()){
-							File fileToDelete = new File("Voxelion.jar");
-							fileToDelete.delete();
-							DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", directory + "Voxelion.jar");
-							File dir = new File(directory);
-							dir.mkdir();
-							game.start();
+					if (!Main.getMain().getSelectedVersion().contentEquals(Main.getMain().getInstaledVersion()) || Main.getMain().getSelectedVersion().contentEquals(Main.getMain().getVersionsList().get(0))){
+						File fileToDelete = new File("Voxelion.jar");
+						fileToDelete.delete();
+						DownloadGame game;
+						if(Main.getMain().getSelectedVersion().contentEquals("Last update")){
+							game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().getVersionsList().get(0) +".jar", Main.getMain().getGameDirectory() + "Voxelion.jar");
 						}
 						else{
-							try {
-								new Loader().runGame(0);
-								System.exit(0);
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}
+							game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().getSelectedVersion() +".jar", Main.getMain().getGameDirectory() + "Voxelion.jar");		
 						}
-					} catch (IOException e1) {
-						e1.printStackTrace();
+						File dir = new File(Main.getMain().getGameDirectory());
+						dir.mkdir();
+						game.start();
+					}
+					else{
+						try {
+							new Loader().runGame(0);
+							System.exit(0);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
 		});
-
-		//Bouton temporaire lancement éditeur
-		Button editorButton = new Button("", null, null, false);
-		Dimension editorButtonsize = new Dimension(29,15);
-		editorButton.setBounds(68 , 30, editorButtonsize.width, editorButtonsize.height);
-		editorButton.addActionListener(new ActionListener(){  
-			public void actionPerformed(ActionEvent e) {
-				if(!new File("Voxelion.jar").exists()){
-					DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", directory + "Voxelion.jar");
-					File dir = new File(directory);
-					dir.mkdir();
-					game.start();
-				} 
-				else{
-					try {
-						if (!Main.getMain().isGameUpdated()){
-							File fileToDelete = new File("Voxelion.jar");
-							fileToDelete.delete();
-							DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", directory + "Voxelion.jar");
-							File dir = new File(directory);
-							dir.mkdir();
-							game.start();
-						}
-						else{
-							try {
-								new Loader().runGame(1);
-								System.exit(0);
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}
-						}
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				}
-			}
-		});
-		getContentPane().add(editorButton);
-		//Bouton temporaire lancement éditeur
 
 		final Button newsButton = new Button("", new ImageIcon(getClass().getResource("buttonNormal.png")).getImage(), new ImageIcon(getClass().getResource("buttonClick.png")).getImage(), true);
 		Dimension newsButtonSize = playButton.getPreferredSize();
@@ -218,14 +186,6 @@ public class Windows extends JFrame
 
 	public ProgressBar getProgressBar(){
 		return progressBar;
-	}
-	
-	public void setSelectedVersion(int version){
-		selectedVersion = version;
-	}
-	
-	public void setDirectory(String var){
-		directory = var;
 	}
 }
 

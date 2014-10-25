@@ -16,8 +16,8 @@ public class Loader {
 	}
 	
 	public void runGame(int mode) throws Exception{
-		
-		Process proc = Runtime.getRuntime().exec("java -jar Voxelion.jar " + mode);
+		Main.getMain().writeSettingsFile();
+		Process proc = Runtime.getRuntime().exec("java -jar " + Main.getMain().getGameDirectory()+"Voxelion.jar " + mode);
 		proc.getInputStream();
 		proc.getErrorStream();
 	}

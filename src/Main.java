@@ -1,7 +1,9 @@
 import java.applet.Applet;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -15,7 +17,9 @@ public class Main extends Applet {
 	private Windows window;
 	public static final String version = "1.0.0";
 	public static String lastVersion;
-	public static String gameVersion;
+	public static String gameVersion = "Last update";
+	public static String instaledVersion="";
+	private String directory = (new File(new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent())).getPath()+"/Voxelion/";;
 	public static ArrayList<String> versionsList = new ArrayList<String>();
 	private static Main main;
 
@@ -30,6 +34,7 @@ public class Main extends Applet {
 	}  
 
 	public void Initialize() throws Exception{
+		loadSettings();
 		if(isUpdated()){
 			window = new Windows();
 		}
@@ -49,10 +54,8 @@ public class Main extends Applet {
 			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 			lastVersion = in.readLine();
 			String line;
-			int i = 0;
 			while((line = in.readLine()) != null){
 				versionsList.add(line);
-				i++;
 			}
 			in.close();
 		}
@@ -64,22 +67,67 @@ public class Main extends Applet {
 		return false;
 	}
 
-	static boolean isGameUpdated() throws IOException{
-		Scanner scanner = null;
+	public void writeSettingsFile(){
+		File dir = new File(System.getenv("APPDATA")+"/Voxelion");
+		dir.mkdir();
+		BufferedWriter writer = null;
 		try {
-			scanner = new Scanner(new File("gameVersion.txt"));
-		} catch (FileNotFoundException e) {
+			File logFile = new File(System.getenv("APPDATA")+"/Voxelion/"+"settings.txt");
+			writer = new BufferedWriter(new FileWriter(logFile));
+			writer.write(directory);
+			writer.newLine();
+			writer.write(gameVersion);
+			writer.newLine();
+			writer.write(instaledVersion);
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				writer.close();
+			} catch (Exception e) {
+			}
 		}
-		gameVersion = scanner.nextLine();
-		scanner.close();
-		if(gameVersion.contentEquals(versionsList.get(2))){
-			return true;
+	}
+	
+	private void loadSettings(){
+		if(new File(System.getenv("APPDATA")+"/Voxelion/settings.txt").exists()){
+			Scanner scanner = null;
+			try {
+				scanner = new Scanner(new File(System.getenv("APPDATA")+"/Voxelion/settings.txt"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			directory = scanner.nextLine();
+			gameVersion = scanner.nextLine();
+			scanner.close();
 		}
-		return false;
+	}
+	
+	public void setSelectedVersion(String var){
+		gameVersion=var;
+	}
+	
+	public String getSelectedVersion(){
+		return gameVersion;
 	}
 
 	public static Main getMain(){
 		return main;
+	}
+	
+	public void setGameDirectory(String dir){
+		directory = dir;
+	}
+	
+	public String getGameDirectory(){
+		return directory;
+	}
+	
+	public String getInstaledVersion(){
+		return instaledVersion;
+	}
+	
+	public ArrayList<String> getVersionsList(){
+		return versionsList ;
 	}
 }
