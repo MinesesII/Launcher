@@ -14,14 +14,17 @@ implements MouseListener{
 	boolean hit = false;  
 	Image image = null;  
 	Image image2 = null;
+	boolean stayActived;
+	boolean actived= false;
 
-	public Button (String title, Image image, Image image2){  
+	public Button (String title, Image image, Image image2, boolean stay){  
 		super();  
 		this.title = title;  
 		listeners = new Vector<ActionListener>();  
 		addMouseListener(this);  
 		this.image = image;  
 		this.image2 = image2;
+		stayActived = stay;
 	}  
 
 	public Dimension getPreferredSize(){  
@@ -35,11 +38,19 @@ implements MouseListener{
 	public void paintComponent(Graphics g){  
 		Graphics2D g2D = (Graphics2D)g;   
 		if (image!=null){  
-			if(hit==true){
+			if(hit==true && !stayActived){
 				g2D.drawImage(image2,0,0,getWidth(),getHeight(),this);  
 			}
-			else{
+			else if (!stayActived){
 				g2D.drawImage(image,0,0,getWidth(),getHeight(),this);  
+			}
+			if(stayActived){
+				if(actived){
+					g2D.drawImage(image2,0,0,getWidth(),getHeight(),this);  
+				}
+				else{
+					g2D.drawImage(image,0,0,getWidth(),getHeight(),this);  
+				}
 			}
 		};  
 	}  
@@ -53,7 +64,7 @@ implements MouseListener{
 	}  
 
 	public void mouseClicked(MouseEvent e){  
-		fireEvent(new ActionEvent(this,0,title));  
+		fireEvent(new ActionEvent(this,0,title)); 
 	}  
 
 	public void mouseEntered(MouseEvent e){
@@ -79,5 +90,14 @@ implements MouseListener{
 			listener.actionPerformed(event);  
 		};  
 	}  
+	
+	public void setActived(boolean var){
+		actived=var;
+		repaint();
+	}
+	
+	public boolean isActived(){
+		return actived;
+	}
 
 }

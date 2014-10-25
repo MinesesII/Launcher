@@ -1,7 +1,6 @@
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -27,7 +26,7 @@ public class News extends JPanel{
 			news.setForeground(new Color(160,160,160));
 			news.setPreferredSize(new Dimension(310,20));
 			add(news);
-			Button newsButton = new Button("", new ImageIcon(getClass().getResource("linkButtonUnclick.png")).getImage(), new ImageIcon(getClass().getResource("linkButtonClick.png")).getImage());
+			Button newsButton = new Button("", new ImageIcon(getClass().getResource("linkButtonUnclick.png")).getImage(), new ImageIcon(getClass().getResource("linkButtonClick.png")).getImage(), false);
 			Dimension newsButtonsize = newsButton.getPreferredSize();
 			newsButton.setBounds(744 , 30, newsButtonsize.width, newsButtonsize.height);
 			final int link = i;

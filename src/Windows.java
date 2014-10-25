@@ -13,7 +13,13 @@ public class Windows extends JFrame
 {
 
 	private ProgressBar progressBar;
-	private News news;
+	private News news = new News();
+	private Parameter parameter = new Parameter();
+	private String[] onglet = {"news", "paramater"};
+	private CardLayout layout = new CardLayout();
+	private JPanel JOnglet = new JPanel();
+	private int selectedVersion=2;
+
 
 	public Windows()
 	{
@@ -32,9 +38,11 @@ public class Windows extends JFrame
 		Point hotSpot = new Point(0,0);  
 		Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "cursor");  
 		setCursor (cursor);
-		showNews();
+		JOnglet.setBounds(104, 290, 368, 134);
+		JOnglet.setLayout(layout);
+		JOnglet.add(news, onglet[0]);
+		JOnglet.add(parameter, onglet[1]);
 		MouseAdapter mouseHandler = new MouseAdapter() {
-
 			private Point offset;
 
 			protected boolean isWithinBorder(MouseEvent e) {
@@ -68,7 +76,7 @@ public class Windows extends JFrame
 
 		getContentPane().addMouseListener(mouseHandler);
 		getContentPane().addMouseMotionListener(mouseHandler);
-		Button closeButton = new Button("", new ImageIcon(getClass().getResource("crossUnclick.jpg")).getImage(), new ImageIcon(getClass().getResource("crossClick.jpg")).getImage());
+		Button closeButton = new Button("", new ImageIcon(getClass().getResource("crossUnclick.jpg")).getImage(), new ImageIcon(getClass().getResource("crossClick.jpg")).getImage(), false);
 		Dimension borderButtonsize = closeButton.getPreferredSize();
 		closeButton.setBounds(744 , 30, borderButtonsize.width, borderButtonsize.height);
 		closeButton.addActionListener(new ActionListener(){  
@@ -76,21 +84,21 @@ public class Windows extends JFrame
 				System.exit(0);
 			}
 		});
-		Button minimizeButton = new Button("", new ImageIcon(getClass().getResource("reduceUnclick.jpg")).getImage(), new ImageIcon(getClass().getResource("reduceClick.jpg")).getImage());
+		Button minimizeButton = new Button("", new ImageIcon(getClass().getResource("reduceUnclick.jpg")).getImage(), new ImageIcon(getClass().getResource("reduceClick.jpg")).getImage(), false);
 		minimizeButton.setBounds(660 , 30, borderButtonsize.width, borderButtonsize.height);
 		minimizeButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e) {
 				setState(Frame.ICONIFIED);
 			}
 		});
-		Button playButton = new Button("", new ImageIcon(getClass().getResource("playUnclick.png")).getImage(), new ImageIcon(getClass().getResource("playClick.png")).getImage());
+		Button playButton = new Button("", new ImageIcon(getClass().getResource("playUnclick.png")).getImage(), new ImageIcon(getClass().getResource("playClick.png")).getImage(), false);
 		Dimension playButtonsize = playButton.getPreferredSize();
 		playButton.setBounds(550 , 460, playButtonsize.width, playButtonsize.height);
 		playButton.addActionListener(new ActionListener(){  
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				if(!new File("Voxelion.jar").exists()){
-					DownloadGame game = new DownloadGame(Main.gameDownloadLink, "Voxelion.jar");
+					DownloadGame game = new DownloadGame(Main.versionsList.get(selectedVersion), "Voxelion.jar");
 					game.start();
 				} 
 				else{
@@ -98,7 +106,7 @@ public class Windows extends JFrame
 						if (!Main.getMain().isGameUpdated()){
 							File fileToDelete = new File("Voxelion.jar");
 							fileToDelete.delete();
-							DownloadGame game = new DownloadGame(Main.gameDownloadLink, "Voxelion.jar");
+							DownloadGame game = new DownloadGame(Main.versionsList.get(selectedVersion), "Voxelion.jar");
 							game.start();
 						}
 						else{
@@ -117,13 +125,13 @@ public class Windows extends JFrame
 		});
 
 		//Bouton temporaire lancement éditeur
-		Button editorButton = new Button("", null, null);
+		Button editorButton = new Button("", null, null, false);
 		Dimension editorButtonsize = new Dimension(29,15);
 		editorButton.setBounds(68 , 30, editorButtonsize.width, editorButtonsize.height);
 		editorButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e) {
 				if(!new File("Voxelion.jar").exists()){
-					DownloadGame game = new DownloadGame(Main.gameDownloadLink, "Voxelion.jar");
+					DownloadGame game = new DownloadGame(Main.versionsList.get(selectedVersion), "Voxelion.jar");
 					game.start();
 				} 
 				else{
@@ -131,7 +139,7 @@ public class Windows extends JFrame
 						if (!Main.getMain().isGameUpdated()){
 							File fileToDelete = new File("Voxelion.jar");
 							fileToDelete.delete();
-							DownloadGame game = new DownloadGame(Main.gameDownloadLink, "Voxelion.jar");
+							DownloadGame game = new DownloadGame(Main.versionsList.get(selectedVersion), "Voxelion.jar");
 							game.start();
 						}
 						else{
@@ -150,12 +158,35 @@ public class Windows extends JFrame
 		});
 		getContentPane().add(editorButton);
 		//Bouton temporaire lancement éditeur
-		
-		Button NewsButton = new Button("", new ImageIcon(getClass().getResource("reduceUnclick.jpg")).getImage(), new ImageIcon(getClass().getResource("reduceClick.jpg")).getImage());
-		minimizeButton.setBounds(660 , 30, borderButtonsize.width, borderButtonsize.height);
-		minimizeButton.addActionListener(new ActionListener(){  
+
+		final Button newsButton = new Button("", new ImageIcon(getClass().getResource("buttonNormal.png")).getImage(), new ImageIcon(getClass().getResource("buttonClick.png")).getImage(), true);
+		Dimension newsButtonSize = playButton.getPreferredSize();
+		newsButton.setBounds(130 , 250, newsButtonSize.width, newsButtonSize.height);
+		newsButton.setActived(true);
+
+		final Button parameterButton = new Button("", new ImageIcon(getClass().getResource("buttonNormal.png")).getImage(), new ImageIcon(getClass().getResource("buttonClick.png")).getImage(), true);
+		Dimension parameterButtonSize = playButton.getPreferredSize();
+		parameterButton.setBounds(300 , 250, parameterButtonSize.width, parameterButtonSize.height);
+		parameterButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e) {
-				setState(Frame.ICONIFIED);
+				if(!parameterButton.isActived()){
+					parameterButton.setActived(true);
+					newsButton.setActived(false);
+					layout.next(JOnglet);
+					news = null;
+					Main.getMain().getWindow().repaint();
+				}
+			}
+		});
+		newsButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e) {
+				if(!newsButton.isActived()){
+					newsButton.setActived(true);
+					parameterButton.setActived(false);
+					layout.next(JOnglet);
+					parameter = null;
+					Main.getMain().getWindow().repaint();
+				}
 			}
 		});
 
@@ -166,19 +197,20 @@ public class Windows extends JFrame
 		getContentPane().add(minimizeButton);
 		getContentPane().add(playButton);
 		getContentPane().add(progressBar);
+		getContentPane().add(newsButton);
+		getContentPane().add(parameterButton);
+		getContentPane().add(JOnglet);
 		setLocationRelativeTo(null);
 		setVisible(true);
-	}
-	
-	private void showNews(){
-		news = new News();
-		news.setBounds(104 , 280, 368, 134);
-		getContentPane().add(news);
 	}
 
 
 	public ProgressBar getProgressBar(){
 		return progressBar;
+	}
+	
+	public void setSelectedVersion(int version){
+		selectedVersion = version;
 	}
 }
 
