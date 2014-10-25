@@ -99,6 +99,7 @@ public class Main extends Applet {
 			}
 			directory = scanner.nextLine();
 			gameVersion = scanner.nextLine();
+			instaledVersion = scanner.nextLine();
 			scanner.close();
 		}
 	}
@@ -125,6 +126,15 @@ public class Main extends Applet {
 	
 	public String getInstaledVersion(){
 		return instaledVersion;
+	}
+	
+	public void setInstaledVersion(){
+		if(gameVersion.contentEquals("Last update")){
+			instaledVersion = versionsList.get(0);
+		}
+		else{
+			instaledVersion = gameVersion;
+		}
 	}
 	
 	public ArrayList<String> getVersionsList(){
