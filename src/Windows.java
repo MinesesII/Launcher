@@ -19,6 +19,7 @@ public class Windows extends JFrame
 	private CardLayout layout = new CardLayout();
 	private JPanel JOnglet = new JPanel();
 	private int selectedVersion=0;
+	private String directory;
 
 
 	public Windows()
@@ -42,6 +43,8 @@ public class Windows extends JFrame
 		JOnglet.setLayout(layout);
 		JOnglet.add(news, onglet[0]);
 		JOnglet.add(parameter, onglet[1]);
+		File pathToJar = new File(new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent());
+		directory = pathToJar.getPath()+"/Voxelion/";
 		MouseAdapter mouseHandler = new MouseAdapter() {
 			private Point offset;
 
@@ -98,7 +101,9 @@ public class Windows extends JFrame
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				if(!new File("Voxelion.jar").exists()){
-					DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", "Voxelion.jar");
+					DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", directory + "Voxelion.jar");
+					File dir = new File(directory);
+					dir.mkdir();
 					game.start();
 				} 
 				else{
@@ -106,7 +111,9 @@ public class Windows extends JFrame
 						if (!Main.getMain().isGameUpdated()){
 							File fileToDelete = new File("Voxelion.jar");
 							fileToDelete.delete();
-							DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", "Voxelion.jar");
+							DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", directory + "Voxelion.jar");
+							File dir = new File(directory);
+							dir.mkdir();
 							game.start();
 						}
 						else{
@@ -131,7 +138,9 @@ public class Windows extends JFrame
 		editorButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e) {
 				if(!new File("Voxelion.jar").exists()){
-					DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", "Voxelion.jar");
+					DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", directory + "Voxelion.jar");
+					File dir = new File(directory);
+					dir.mkdir();
 					game.start();
 				} 
 				else{
@@ -139,7 +148,9 @@ public class Windows extends JFrame
 						if (!Main.getMain().isGameUpdated()){
 							File fileToDelete = new File("Voxelion.jar");
 							fileToDelete.delete();
-							DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", "Voxelion.jar");
+							DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", directory + "Voxelion.jar");
+							File dir = new File(directory);
+							dir.mkdir();
 							game.start();
 						}
 						else{
@@ -211,6 +222,10 @@ public class Windows extends JFrame
 	
 	public void setSelectedVersion(int version){
 		selectedVersion = version;
+	}
+	
+	public void setDirectory(String var){
+		directory = var;
 	}
 }
 

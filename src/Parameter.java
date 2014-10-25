@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,6 +18,7 @@ public class Parameter extends JPanel{
 	private JComboBox updateList = new JComboBox();
 
 	public Parameter (){  
+		//Versions//
 		JLabel useVersion = new JLabel("Use version : ");
 		useVersion.setFont(new Font("Ebrima", Font.BOLD, 16));
 		useVersion.setForeground(new Color(160,160,160));
@@ -55,6 +57,20 @@ public class Parameter extends JPanel{
 			}
 		});
 		add(patchNotesButton);
+		//End Versions//
+		
+		//Directory//
+		JLabel directory = new JLabel("Directory : ");
+		directory.setFont(new Font("Ebrima", Font.BOLD, 16));
+		directory.setForeground(new Color(160,160,160));
+		directory.setPreferredSize(new Dimension(90,20));
+		add(directory);
+		JTextField fieldDirectory = new JTextField(); 
+		fieldDirectory.setPreferredSize(new Dimension(220,20));
+		File pathToJar = new File(new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent());
+		fieldDirectory.setText(pathToJar.getPath()+"/Voxelion/");
+		add(fieldDirectory);
+		//End Repertory//
 	}  
 
 	public void paintComponent(Graphics g){  
