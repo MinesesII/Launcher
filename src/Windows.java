@@ -18,7 +18,7 @@ public class Windows extends JFrame
 	private String[] onglet = {"news", "paramater"};
 	private CardLayout layout = new CardLayout();
 	private JPanel JOnglet = new JPanel();
-	private int selectedVersion=2;
+	private int selectedVersion=0;
 
 
 	public Windows()
@@ -98,7 +98,7 @@ public class Windows extends JFrame
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				if(!new File("Voxelion.jar").exists()){
-					DownloadGame game = new DownloadGame(Main.versionsList.get(selectedVersion), "Voxelion.jar");
+					DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", "Voxelion.jar");
 					game.start();
 				} 
 				else{
@@ -106,7 +106,7 @@ public class Windows extends JFrame
 						if (!Main.getMain().isGameUpdated()){
 							File fileToDelete = new File("Voxelion.jar");
 							fileToDelete.delete();
-							DownloadGame game = new DownloadGame(Main.versionsList.get(selectedVersion), "Voxelion.jar");
+							DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", "Voxelion.jar");
 							game.start();
 						}
 						else{
@@ -131,7 +131,7 @@ public class Windows extends JFrame
 		editorButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e) {
 				if(!new File("Voxelion.jar").exists()){
-					DownloadGame game = new DownloadGame(Main.versionsList.get(selectedVersion), "Voxelion.jar");
+					DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", "Voxelion.jar");
 					game.start();
 				} 
 				else{
@@ -139,7 +139,7 @@ public class Windows extends JFrame
 						if (!Main.getMain().isGameUpdated()){
 							File fileToDelete = new File("Voxelion.jar");
 							fileToDelete.delete();
-							DownloadGame game = new DownloadGame(Main.versionsList.get(selectedVersion), "Voxelion.jar");
+							DownloadGame game = new DownloadGame("http://voxelion.fr/Launcher/GameVersions/Voxelion_"+ Main.getMain().versionsList.get(selectedVersion) +".jar", "Voxelion.jar");
 							game.start();
 						}
 						else{

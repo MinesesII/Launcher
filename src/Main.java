@@ -15,7 +15,6 @@ public class Main extends Applet {
 	private Windows window;
 	public static final String version = "1.0.0";
 	public static String lastVersion;
-	public static String launcherDownloadLink;
 	public static String gameVersion;
 	public static ArrayList<String> versionsList = new ArrayList<String>();
 	private static Main main;
@@ -35,7 +34,7 @@ public class Main extends Applet {
 			window = new Windows();
 		}
 		else{
-			new Download(launcherDownloadLink, "Voxelion_Launcher_"+lastVersion+".jar");
+			new Download("http://voxelion.fr/Launcher/Voxelion_launcher_1.0.0.jar", "Voxelion_Launcher_"+lastVersion+".jar");
 			new Loader().runNewLauncher("Voxelion_launcher_"+lastVersion+".jar");		
 		}
 	}
@@ -49,7 +48,6 @@ public class Main extends Applet {
 			URL url = new URL("http://voxelion.fr/Launcher/versions.txt");
 			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 			lastVersion = in.readLine();
-			launcherDownloadLink = in.readLine();
 			String line;
 			int i = 0;
 			while((line = in.readLine()) != null){
